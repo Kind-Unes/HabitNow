@@ -3,3 +3,7 @@ bool isSameDay(DateTime date1, DateTime date2) {
       date1.month == date2.month &&
       date1.day == date2.day;
 }
+
+String formatDate(DateTime date) {
+  return "${date.day}/${date.month}/${date.year}";
+}

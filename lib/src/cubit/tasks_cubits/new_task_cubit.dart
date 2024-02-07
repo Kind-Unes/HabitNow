@@ -19,19 +19,19 @@ class NewTaskCubit extends Cubit<NewTaskState> {
       : super(NewTaskState(TaskModel(
             name: '',
             category: CategoryModel(
-                color: AppColors.kLightPurple, name: "Task", icon: Icons.abc),
+                color: AppColors.kLightPurple,
+                name: "Task",
+                icon: Icons.timer_outlined),
             date: DateTime.now(),
             reminder: ReminderModel(
               schedule: ReminderSchedule.alwaysEnabled,
               time: DateTime.now(),
               type: ReminderTime.dontRemind,
             ),
-            priority: 1,
+            priority: -1,
             note: '',
             isPendingTask: false,
-            id: const Uuid().v4()
-            
-            )));
+            id: const Uuid().v4())));
 
   void updateProperty(
       {String? name,

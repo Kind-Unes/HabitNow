@@ -26,24 +26,21 @@ import 'package:habit_now/src/presentation/timer/timer.dart';
 import 'package:habit_now/src/utils/boxes.dart';
 import 'package:habit_now/src/utils/models/task_model.dart';
 import 'package:habit_now/src/utils/theme.dart';
-
-
-
 import 'package:hive_flutter/adapters.dart';
 
 //! 0.0235 == 20 px;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Hive.registerAdapter(TaskModelAdapter());
   Hive.registerAdapter(ReminderModelAdapter());
   Hive.registerAdapter(CategoryModelAdapter());
   Hive.registerAdapter(ColorAdapter());
   Hive.registerAdapter(TimeOfDayAdapter());
   Hive.registerAdapter(IconDataAdapter()); // Register the adapter for IconData
+  Hive.registerAdapter(TaskModelAdapter());
 
   await Hive.initFlutter();
-  tasksBox = await Hive.openBox<TaskModel>('habitnow');
+  tasksBox = await Hive.openBox<TaskModel>('dingo');
 
   runApp(const MyApp());
 }

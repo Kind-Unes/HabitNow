@@ -7,7 +7,6 @@ import 'package:habit_now/src/presentation/shared/dialogMessages.dart';
 import 'package:habit_now/src/utils/const.dart';
 import 'package:habit_now/src/utils/extentions.dart';
 import 'package:habit_now/src/utils/helpers.dart';
-import 'package:uuid/uuid.dart';
 
 class NewTaskPage extends StatelessWidget {
   const NewTaskPage({super.key});
@@ -116,6 +115,8 @@ class NewTaskButtons extends StatelessWidget {
                     .read<TasksDatabaseCubit>()
                     .createTask(context.read<NewTaskCubit>().state.taskModel);
                 context.read<NewTaskCubit>().initState();
+                context.read<TasksDatabaseCubit>().getTasks();
+
                 context.pushNamed("/main");
               },
               child: Container(

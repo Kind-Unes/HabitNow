@@ -3,13 +3,14 @@ import 'package:habit_now/src/utils/boxes.dart';
 import 'package:habit_now/src/utils/models/task_model.dart';
 
 class TasksDatabaseCubit extends Cubit<List<TaskModel>> {
-  TasksDatabaseCubit() : super([]);
+  TasksDatabaseCubit() : super([]) {
+    getTasks();
+  }
 
   Future<void> createTask(TaskModel taskModel) async {
     await tasksBox.put(taskModel.id, taskModel);
 
-    print(tasksBox.values
-        .where((e) => e.id == "012bc013-a38d-4371-9da0-629db8a2d16f"));
+    print(tasksBox.values.length);
   }
 
   void getTasks() {
@@ -25,7 +26,6 @@ class TasksDatabaseCubit extends Cubit<List<TaskModel>> {
     if (index != -1) {
       await tasksBox.putAt(index, updatedTask);
       final updatedData =
-      
           tasksBox.values.map((value) => value as TaskModel).toList();
       emit(updatedData);
     }

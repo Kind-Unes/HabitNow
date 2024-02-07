@@ -5,12 +5,16 @@ import 'package:habit_now/src/presentation/shared/dialogMessages.dart';
 import 'package:habit_now/src/utils/const.dart';
 import 'package:habit_now/src/utils/extentions.dart';
 import 'package:habit_now/src/utils/helpers.dart';
+import 'package:habit_now/src/utils/models/task_model.dart';
 
 class EditTaskPage extends StatelessWidget {
   const EditTaskPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    TaskModel taskModel =
+        ModalRoute.of(context)!.settings.arguments as TaskModel;
+
     return Scaffold(
       body: SafeArea(
         child: Stack(
@@ -92,10 +96,7 @@ class EditTaskTextFeild extends StatelessWidget {
         height: context.height * 0.065,
         child: TextField(
           focusNode: FocusNode(),
-          onChanged: (newText) {
-            context.read<NewTaskCubit>().updateProperty(name: newText);
-            debugPrint(context.read<NewTaskCubit>().state.taskModel.name);
-          },
+          onChanged: (newText) {},
           style: TextStyle(fontSize: context.fontSize * 1.1),
           autofocus: true,
           autocorrect: true,

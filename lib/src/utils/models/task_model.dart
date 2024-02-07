@@ -7,9 +7,9 @@ part "task_model.g.dart";
 
 @HiveType(typeId: 0)
 class TaskModel {
-  @HiveField(0)
-  final String id;
   @HiveField(7)
+  final String id;
+  @HiveField(0)
   final String name;
   @HiveField(1)
   final CategoryModel category;
