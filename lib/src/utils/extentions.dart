@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:habit_now/src/presentation/shared/dialogMessages.dart';
 import 'package:habit_now/src/utils/const.dart';
+import 'package:habit_now/src/utils/models/task_model.dart';
 
 //? added for test
 // extension TextExtention on TextStyle {
@@ -40,14 +41,12 @@ extension StringExtension on String {
 extension PushNamed on BuildContext {
   void pushNamed(
     String route, {
-    Object? arguments,
+    TaskModel? arguments,
   }) {
     Navigator.pushNamed(
       this,
       route,
-      arguments: {
-        "data": arguments,
-      },
+      arguments: arguments,
     );
   }
 }

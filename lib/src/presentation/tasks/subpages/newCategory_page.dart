@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:habit_now/src/cubit/tasks_cubits/categories_database_cubit.dart';
 import 'package:habit_now/src/presentation/shared/bottomSheets.dart';
 import 'package:habit_now/src/utils/const.dart';
 import 'package:habit_now/src/utils/extentions.dart';
+import 'package:habit_now/src/utils/models/category_model.dart';
 import 'package:habit_now/src/utils/models/task_model.dart';
 
 class CategoriesPage extends StatelessWidget {
@@ -48,21 +51,30 @@ class CategoriesPage extends StatelessWidget {
                 SizedBox(
                     height: context.height * 0.2,
                     width: double.infinity,
-                    child:
-                        ListView(scrollDirection: Axis.horizontal, children: [
-                      CategoryListViewElement(
-                        category: CategoryModel(
-                            color: AppColors.kLightPurple,
-                            icon: Icons.category,
-                            name: 'Younes'),
-                      ),
-                      CategoryListViewElement(
-                        category: CategoryModel(
-                            color: const Color.fromARGB(255, 180, 155, 15),
-                            icon: Icons.category_outlined,
-                            name: 'Music'),
-                      ),
-                    ])),
+                    child: BlocBuilder<CategoriesDatabaseCubit,
+                        List<CategoryModel>>(
+                      builder: (context, categoreyModel) {
+                        return ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: categoreyModel
+                              .length, // Set itemCount to the length of your data source
+                          itemBuilder: (context, index) {
+                            if (index == 0 || index >= categoreyModel.length) {
+                              // Skip index 0 and handle cases where index is out of bounds
+                              return Container();
+                            }
+
+                            return CategoryListViewElement(
+                              category: CategoryModel(
+                                color: categoreyModel[index].color,
+                                icon: categoreyModel[index].icon,
+                                name: categoreyModel[index].name,
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    )),
                 const Divider(
                   color: Color.fromARGB(255, 62, 62, 62),
                 ),
@@ -92,59 +104,21 @@ class CategoriesPage extends StatelessWidget {
                       ]),
                 ),
                 SizedBox(
-                    height: context.height * 0.2,
-                    width: double.infinity,
-                    child:
-                        ListView(scrollDirection: Axis.horizontal, children: [
-                      CategoryListViewElement(
+                  height: context.height * 0.2,
+                  width: double.infinity,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: categories.map((e) {
+                      return CategoryListViewElement(
                         category: CategoryModel(
-                            color: AppColors.kLightPurple,
-                            icon: Icons.category,
-                            name: 'Younes'),
-                      ),
-                      CategoryListViewElement(
-                        category: CategoryModel(
-                            color: const Color.fromARGB(255, 180, 155, 15),
-                            icon: Icons.category_outlined,
-                            name: 'Music'),
-                      ),
-                      CategoryListViewElement(
-                        category: CategoryModel(
-                            color: const Color.fromARGB(255, 180, 155, 15),
-                            icon: Icons.category_outlined,
-                            name: 'Music'),
-                      ),
-                      CategoryListViewElement(
-                        category: CategoryModel(
-                            color: const Color.fromARGB(255, 180, 155, 15),
-                            icon: Icons.category_outlined,
-                            name: 'Music'),
-                      ),
-                      CategoryListViewElement(
-                        category: CategoryModel(
-                            color: const Color.fromARGB(255, 180, 155, 15),
-                            icon: Icons.category_outlined,
-                            name: 'Music'),
-                      ),
-                      CategoryListViewElement(
-                        category: CategoryModel(
-                            color: const Color.fromARGB(255, 180, 155, 15),
-                            icon: Icons.category_outlined,
-                            name: 'Music'),
-                      ),
-                      CategoryListViewElement(
-                        category: CategoryModel(
-                            color: const Color.fromARGB(255, 180, 155, 15),
-                            icon: Icons.category_outlined,
-                            name: 'Music'),
-                      ),
-                      CategoryListViewElement(
-                        category: CategoryModel(
-                            color: const Color.fromARGB(255, 180, 155, 15),
-                            icon: Icons.category_outlined,
-                            name: 'Music'),
-                      ),
-                    ])),
+                          color: e.color,
+                          icon: e.icon,
+                          name: e.name,
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
                 const Divider(
                   color: Color.fromARGB(255, 62, 62, 62),
                 ),
@@ -238,7 +212,7 @@ class CategoryListViewElement extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  "1entry", // Implement the logic here
+                  "0entry", // Implement the logic here
                   style: TextStyle(
                       color: Colors.white.withOpacity(0.8),
                       fontSize: context.fontSize * 0.75,
@@ -469,8 +443,6 @@ class CategoryIconButton extends StatelessWidget {
   }
 }
 
-
-
 class DeleteCategoryDialog extends StatelessWidget {
   const DeleteCategoryDialog({
     super.key,
@@ -592,7 +564,6 @@ class CategoryColorButton extends StatelessWidget {
     );
   }
 }
-
 
 class NewCategoryAppBar extends StatelessWidget implements PreferredSize {
   const NewCategoryAppBar({

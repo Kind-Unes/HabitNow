@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:habit_now/src/cubit/main/bottomNavBar_cubit.dart';
 import 'package:habit_now/src/cubit/tasks_cubits/DefineTaskFocusNode_cubit.dart';
 import 'package:habit_now/src/cubit/tasks_cubits/DefineTaskTextController_cubit.dart';
+import 'package:habit_now/src/cubit/tasks_cubits/categories_database_cubit.dart';
 import 'package:habit_now/src/cubit/tasks_cubits/database_service_cubit.dart';
 import 'package:habit_now/src/cubit/tasks_cubits/new_task_cubit.dart';
 import 'package:habit_now/src/cubit/tasks_cubits/settPriorityTextFeild_cubit.dart';
@@ -41,6 +42,7 @@ void main() async {
 
   await Hive.initFlutter();
   tasksBox = await Hive.openBox<TaskModel>('dingo');
+  customCategories = await Hive.openBox<CategoryModel>("categories");
 
   runApp(const MyApp());
 }
@@ -78,6 +80,12 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (context) => DefineTaskFocusNodeCubit(),
+          ),
+          BlocProvider(
+            create: (context) => EditTaskControllerCubit(),
+          ),
+          BlocProvider(
+            create: (context) => CategoriesDatabaseCubit(),
           ),
         ],
         child: MaterialApp(

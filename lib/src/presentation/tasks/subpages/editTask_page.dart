@@ -1,5 +1,8 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:habit_now/src/cubit/tasks_cubits/database_service_cubit.dart';
 import 'package:habit_now/src/cubit/tasks_cubits/new_task_cubit.dart';
 import 'package:habit_now/src/presentation/shared/dialogMessages.dart';
 import 'package:habit_now/src/utils/const.dart';
@@ -12,93 +15,123 @@ class EditTaskPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TaskModel taskModel =
+    final TaskModel taskModel =
         ModalRoute.of(context)!.settings.arguments as TaskModel;
 
-    return Scaffold(
-      body: SafeArea(
-        child: Stack(
-          children: [
-            SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: context.height * 0.01,
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.start,
+    final textFieldCubit = context.read<NewTaskCubit>();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      textFieldCubit.initStateWithData(taskModel);
+    });
+
+    return BlocBuilder<NewTaskCubit, NewTaskState>(
+      builder: (context, taskModel) {
+        return Scaffold(
+          body: SafeArea(
+            child: Stack(
+              children: [
+                SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      IconButton(
-                          onPressed: () {
-                            context.pop();
-                          },
-                          icon: const Icon(
-                            Icons.chevron_left,
-                            color: AppColors.kLightPurple,
-                          )),
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        margin: EdgeInsets.only(left: context.height * 0.01),
-                        height: context.height * 0.05,
-                        width: context.width * 0.3,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: Text(
-                          "Edit Task",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: context.fontSize),
-                        ),
+                      SizedBox(
+                        height: context.height * 0.01,
                       ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          IconButton(
+                              onPressed: () {
+                                context.pop();
+                              },
+                              icon: const Icon(
+                                Icons.chevron_left,
+                                color: AppColors.kLightPurple,
+                              )),
+                          Container(
+                            alignment: Alignment.centerLeft,
+                            margin:
+                                EdgeInsets.only(left: context.height * 0.01),
+                            height: context.height * 0.05,
+                            width: context.width * 0.3,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            child: Text(
+                              "Edit Task",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: context.fontSize),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: context.height * 0.01,
+                      ),
+                      EditTaskTextFeild(
+                        taskModel: taskModel.taskModel,
+                      ),
+                      SizedBox(
+                        height: context.height * 0.01,
+                      ),
+                      const EditTaskCategoryTile(),
+                      EditTaskDateTile(taskModel: taskModel.taskModel),
+                      const EditTaskTimeTile(),
+                      const EditTaskCheckListTile(),
+                      const EditTaskPriorityTile(),
+                      const EditTaskNoteTile(),
+                      const EditTaskPendingTaskTile(),
+                      EditTaskDeleteNoteTile(
+                        taskModel: taskModel.taskModel,
+                      )
                     ],
                   ),
-                  SizedBox(
-                    height: context.height * 0.01,
-                  ),
-                  const EditTaskTextFeild(),
-                  SizedBox(
-                    height: context.height * 0.01,
-                  ),
-                  const EditTaskCategoryTile(),
-                  const EditTaskDateTile(),
-                  const EditTaskTimeTile(),
-                  const EditTaskCheckListTile(),
-                  const EditTaskPriorityTile(),
-                  const EditTaskNoteTile(),
-                  const EditTaskPendingTaskTile(),
-                  const EditTaskDeleteNoteTile()
-                ],
-              ),
+                ),
+                const EditTaskButtons(),
+              ],
             ),
-            const EditTaskButtons(),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }
 
 class EditTaskTextFeild extends StatelessWidget {
   const EditTaskTextFeild({
-    super.key,
-  });
+    Key? key,
+    required this.taskModel,
+  }) : super(key: key);
+
+  final TaskModel taskModel;
 
   @override
   Widget build(BuildContext context) {
+    final EditTaskControllerCubit textFieldCubit =
+        context.read<EditTaskControllerCubit>();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      textFieldCubit.initializeTextField(taskModel.name);
+      textFieldCubit.controller.text = taskModel.name;
+    });
+
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: context.height * 0.01),
       child: SizedBox(
         height: context.height * 0.065,
         child: TextField(
-          focusNode: FocusNode(),
-          onChanged: (newText) {},
+          controller: textFieldCubit.controller,
+          onChanged: (newText) {
+            context.read<NewTaskCubit>().updateProperty(name: newText);
+            context
+                .read<TasksDatabaseCubit>()
+                .updateTask(context.read<NewTaskCubit>().state.taskModel);
+          },
           style: TextStyle(fontSize: context.fontSize * 1.1),
-          autofocus: true,
           autocorrect: true,
           cursorColor: AppColors.kLightPurple,
           cursorHeight: context.height * 0.03,
@@ -137,15 +170,18 @@ class EditTaskTextFeild extends StatelessWidget {
 class EditTaskDeleteNoteTile extends StatelessWidget {
   const EditTaskDeleteNoteTile({
     super.key,
+    required this.taskModel,
   });
 
+  final TaskModel taskModel;
   @override
   Widget build(BuildContext context) {
     return Material(
         color: AppColors.kBackgroundColor,
         child: InkWell(
             onTap: () {
-              // do the stuff Deletion stuff
+              context.read<TasksDatabaseCubit>().deleteTask(taskModel);
+              context.pop();
             },
             child: Container(
               decoration: const BoxDecoration(
@@ -652,8 +688,10 @@ class EditTaskTimeTile extends StatelessWidget {
 
 class EditTaskDateTile extends StatelessWidget {
   const EditTaskDateTile({
-    super.key,
-  });
+    Key? key,
+    required this.taskModel,
+  }) : super(key: key);
+  final TaskModel taskModel;
 
   @override
   Widget build(BuildContext context) {
@@ -740,72 +778,75 @@ class EditTaskCategoryTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-        color: AppColors.kBackgroundColor,
-        child: InkWell(
-            onTap: () {
-              context.showDialogMessage(const SelectCategoryDialog());
-            },
-            child: Container(
-              decoration: const BoxDecoration(
-                  border: Border.symmetric(
-                      horizontal: BorderSide(
-                          color: Color.fromARGB(255, 79, 79, 79), width: 0.3))),
-              height: context.height * 0.085,
-              child: Padding(
-                padding:
-                    EdgeInsets.symmetric(horizontal: context.height * 0.01),
-                child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Center(
-                        child: Icon(
-                          Icons.category_outlined,
-                          size: context.height * 0.049 / 1.45,
-                          color: const Color.fromARGB(255, 225, 23, 90),
+    return SingleChildScrollView(
+      child: Material(
+          color: AppColors.kBackgroundColor,
+          child: InkWell(
+              onTap: () {
+                context.showDialogMessage(const SelectCategoryDialog());
+              },
+              child: Container(
+                decoration: const BoxDecoration(
+                    border: Border.symmetric(
+                        horizontal: BorderSide(
+                            color: Color.fromARGB(255, 79, 79, 79),
+                            width: 0.3))),
+                height: context.height * 0.085,
+                child: Padding(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: context.height * 0.01),
+                  child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Center(
+                          child: Icon(
+                            Icons.category_outlined,
+                            size: context.height * 0.049 / 1.45,
+                            color: const Color.fromARGB(255, 225, 23, 90),
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        width: context.width * 0.03,
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "Category",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500),
-                          ),
-                          SizedBox(
-                            height: context.height * 0.005,
-                          ),
-                        ],
-                      ),
-                      const Spacer(),
-                      Text(
-                        "Task",
-                        style: TextStyle(
-                            color: AppColors.kLightPurple,
-                            fontSize: context.fontSize * 0.8,
-                            fontWeight: FontWeight.w500),
-                      ),
-                      SizedBox(
-                        width: context.width * 0.02,
-                      ),
-                      Container(
-                        height: context.height * 0.045,
-                        width: context.height * 0.045,
-                        decoration: BoxDecoration(
-                            color: AppColors.kLightPurple,
-                            borderRadius: BorderRadius.circular(10)),
-                        child: const Icon(Icons.access_time),
-                      ),
-                    ]),
-              ),
-            )));
+                        SizedBox(
+                          width: context.width * 0.03,
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              "Category",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                            SizedBox(
+                              height: context.height * 0.005,
+                            ),
+                          ],
+                        ),
+                        const Spacer(),
+                        Text(
+                          "Task",
+                          style: TextStyle(
+                              color: AppColors.kLightPurple,
+                              fontSize: context.fontSize * 0.8,
+                              fontWeight: FontWeight.w500),
+                        ),
+                        SizedBox(
+                          width: context.width * 0.02,
+                        ),
+                        Container(
+                          height: context.height * 0.045,
+                          width: context.height * 0.045,
+                          decoration: BoxDecoration(
+                              color: AppColors.kLightPurple,
+                              borderRadius: BorderRadius.circular(10)),
+                          child: const Icon(Icons.access_time),
+                        ),
+                      ]),
+                ),
+              ))),
+    );
   }
 }

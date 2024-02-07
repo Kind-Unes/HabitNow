@@ -42,27 +42,29 @@ class SingleTasksPage extends StatelessWidget {
 
           List<String> uniqueDates = groupedTasks.keys.toList();
 
-          return ListView.builder(
-            itemCount: uniqueDates.length * 2 - 1,
-            itemBuilder: (context, index) {
-              if (index.isOdd) {
-                return Container();
-              } else {
-                int taskIndex = index ~/ 2;
-                String currentDate = uniqueDates[taskIndex];
-                bool isToday = _isToday(currentDate);
+          return uniqueDates.isEmpty
+              ? const SingleTasksEmptyPage()
+              : ListView.builder(
+                  itemCount: uniqueDates.length * 2 - 1,
+                  itemBuilder: (context, index) {
+                    if (index.isOdd) {
+                      return Container();
+                    } else {
+                      int taskIndex = index ~/ 2;
+                      String currentDate = uniqueDates[taskIndex];
+                      bool isToday = _isToday(currentDate);
 
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TaskDate(text: isToday ? 'Today' : currentDate),
-                    ...groupedTasks[currentDate]!
-                        .map((task) => TaskTile(taskModel: task)),
-                  ],
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TaskDate(text: isToday ? 'Today' : currentDate),
+                          ...groupedTasks[currentDate]!
+                              .map((task) => TaskTile(taskModel: task)),
+                        ],
+                      );
+                    }
+                  },
                 );
-              }
-            },
-          );
         },
       ),
     );

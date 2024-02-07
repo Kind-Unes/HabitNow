@@ -34,6 +34,7 @@ class TaskModel {
     required this.note,
     required this.isPendingTask,
   });
+
   TaskModel copyWith({
     String? name,
     String? id,

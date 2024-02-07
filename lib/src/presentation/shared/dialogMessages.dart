@@ -174,153 +174,155 @@ class SelectCategoryDialog extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16.0),
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const SizedBox(height: 18.0),
-          Text(
-            'Select a category',
-            style: TextStyle(
-                fontSize: context.fontSize * 0.85,
-                color: Colors.white.withOpacity(0.8),
-                fontWeight: FontWeight.normal),
-          ),
-          const SizedBox(height: 10.0),
-          const Divider(
-            color: Color.fromARGB(255, 46, 46, 46),
-          ),
-          SizedBox(
-            height: context.height * 0.37,
-            child: SingleChildScrollView(
-              child: Column(children: [
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: context.width * 0.05),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      CategoryButton(),
-                      CategoryButton(),
-                      CategoryButton(),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: context.width * 0.05),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      CategoryButton(),
-                      CategoryButton(),
-                      CategoryButton(),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: context.width * 0.05),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      CategoryButton(),
-                      CategoryButton(),
-                      CategoryButton(),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: context.width * 0.05),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      CategoryButton(),
-                      CategoryButton(),
-                      CategoryButton(),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: context.width * 0.05),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      CategoryButton(),
-                      CategoryButton(),
-                      CategoryButton(),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: context.width * 0.05),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      CategoryButton(),
-                      CategoryButton(),
-                      CategoryButton(),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: context.width * 0.05),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      CategoryButton(),
-                    ],
-                  ),
-                ),
-              ]),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: 18.0),
+            Text(
+              'Select a category',
+              style: TextStyle(
+                  fontSize: context.fontSize * 0.85,
+                  color: Colors.white.withOpacity(0.8),
+                  fontWeight: FontWeight.normal),
             ),
-          ),
-          InkWell(
-              onTap: () {
-                context.pushNamed("/new_category");
-              },
-              child: Container(
-                height: context.height * 0.07,
-                decoration: const BoxDecoration(
-                    border: Border(
-                        top: BorderSide(
-                            color: Color.fromARGB(255, 79, 79, 79),
-                            width: 0.3))),
-                child: Center(
-                  child: Text(
-                    "MANAGE CATEGORIES",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: context.fontSize * 00.85),
+            const SizedBox(height: 10.0),
+            const Divider(
+              color: Color.fromARGB(255, 46, 46, 46),
+            ),
+            SizedBox(
+              height: context.height * 0.37,
+              child: SingleChildScrollView(
+                child: Column(children: [
+                  Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: context.width * 0.05),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        CategoryButton(),
+                        CategoryButton(),
+                        CategoryButton(),
+                      ],
+                    ),
                   ),
-                ),
-              )),
-          InkWell(
-              onTap: () {
-                context.pop();
-              },
-              child: Container(
-                height: context.height * 0.07,
-                decoration: const BoxDecoration(
-                    border: Border(
-                        top: BorderSide(
-                            color: Color.fromARGB(255, 79, 79, 79),
-                            width: 0.3))),
-                child: Center(
-                  child: Text(
-                    "CLOSE",
-                    style: TextStyle(
-                        color: AppColors.kLightPurple,
-                        fontWeight: FontWeight.bold,
-                        fontSize: context.fontSize * 00.85),
+                  Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: context.width * 0.05),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        CategoryButton(),
+                        CategoryButton(),
+                        CategoryButton(),
+                      ],
+                    ),
                   ),
-                ),
-              )),
-        ],
+                  Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: context.width * 0.05),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        CategoryButton(),
+                        CategoryButton(),
+                        CategoryButton(),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: context.width * 0.05),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        CategoryButton(),
+                        CategoryButton(),
+                        CategoryButton(),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: context.width * 0.05),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        CategoryButton(),
+                        CategoryButton(),
+                        CategoryButton(),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: context.width * 0.05),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        CategoryButton(),
+                        CategoryButton(),
+                        CategoryButton(),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: context.width * 0.05),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        CategoryButton(),
+                      ],
+                    ),
+                  ),
+                ]),
+              ),
+            ),
+            InkWell(
+                onTap: () {
+                  context.pushNamed("/new_category");
+                },
+                child: Container(
+                  height: context.height * 0.07,
+                  decoration: const BoxDecoration(
+                      border: Border(
+                          top: BorderSide(
+                              color: Color.fromARGB(255, 79, 79, 79),
+                              width: 0.3))),
+                  child: Center(
+                    child: Text(
+                      "MANAGE CATEGORIES",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: context.fontSize * 00.85),
+                    ),
+                  ),
+                )),
+            InkWell(
+                onTap: () {
+                  context.pop();
+                },
+                child: Container(
+                  height: context.height * 0.07,
+                  decoration: const BoxDecoration(
+                      border: Border(
+                          top: BorderSide(
+                              color: Color.fromARGB(255, 79, 79, 79),
+                              width: 0.3))),
+                  child: Center(
+                    child: Text(
+                      "CLOSE",
+                      style: TextStyle(
+                          color: AppColors.kLightPurple,
+                          fontWeight: FontWeight.bold,
+                          fontSize: context.fontSize * 00.85),
+                    ),
+                  ),
+                )),
+          ],
+        ),
       ),
     );
   }

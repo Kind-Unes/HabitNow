@@ -60,6 +60,50 @@ class NewCategoryBottomSheetTile extends StatelessWidget {
   }
 }
 
+class NewCategoryBottomSheetTileButton extends StatelessWidget {
+  const NewCategoryBottomSheetTileButton({
+    super.key, required this.categoryModel,
+  });
+
+  final CategoryModel categoryModel;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+        color: AppColors.kBackgroundColor,
+        child: InkWell(
+            onTap: () {
+
+              
+              // add to data base
+              // + you should refresh the main page and implement a refreshing function or getCategories function
+              // re initialize the NEWCATEGORY CUBIT + CREATE IT FIRST
+              // WRAP
+              // ADD TO UI STUFF
+              // POP
+            },
+            child: Container(
+                decoration: const BoxDecoration(
+                    border: Border(
+                        top: BorderSide(
+                            color: Color.fromARGB(255, 62, 62, 62),
+                            width: 0.5))),
+                padding: EdgeInsets.symmetric(
+                  vertical: context.height * 0.026,
+                ),
+                child: Center(
+                  child: Center(
+                      child: Text(
+                    "CREATE CATEGORY",
+                    style: TextStyle(
+                        color: Colors.red,
+                        fontSize: context.fontSize * 1.05,
+                        fontWeight: FontWeight.bold),
+                  )),
+                ))));
+  }
+}
+
 class NewCategoryBottomSheetFirstTile extends StatelessWidget {
   const NewCategoryBottomSheetFirstTile({
     super.key,
@@ -234,19 +278,9 @@ class NewCategoryBottomSheet extends StatelessWidget {
           title: 'Category color',
           function: () {
             context.showDialogMessage(const NewCategoryColorDialog());
-// CategoryColorButton
           },
         ),
-        NewCategoryBottomSheetTile(
-          icon: Icons.mode_edit_outline_outlined,
-          title: 'Delete category',
-          function: () {
-            context.showDialogMessage(DeleteCategoryDialog(
-              yesFunction: () {},
-              noFunction: () {},
-            ));
-          },
-        ),
+        const NewCategoryBottomSheetTileButton()
       ],
     );
   }

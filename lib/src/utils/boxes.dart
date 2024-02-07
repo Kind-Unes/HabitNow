@@ -4,4 +4,4 @@ late Box tasksBox;
 // late Box habitsBox;
 // late Box recurringTaskBox;
 // late Box timerBox;
-// late Box addedCategories;
+late Box customCategories;

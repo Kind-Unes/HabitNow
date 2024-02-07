@@ -71,4 +71,37 @@ class NewTaskCubit extends Cubit<NewTaskState> {
         isPendingTask: false,
         id: const Uuid().v4())));
   }
+
+  void initStateWithData(TaskModel taskModel) {
+    final TaskModel updatedTaskModel = TaskModel(
+      name: taskModel.name,
+      category: taskModel.category,
+      date: taskModel.date,
+      reminder: taskModel.reminder,
+      priority: taskModel.priority,
+      note: taskModel.note,
+      isPendingTask: taskModel.isPendingTask,
+      id: taskModel.id,
+    );
+    emit(NewTaskState(updatedTaskModel));
+  }
+}
+
+class EditTaskControllerCubit extends Cubit<void Function()> {
+  EditTaskControllerCubit() : super(() {});
+  final TextEditingController controller = TextEditingController();
+  final FocusNode focusNode = FocusNode();
+
+  void initializeTextField(String text) {
+    // Set the initial text and highlight it
+    controller.text = text;
+    controller.selection = TextSelection(
+      baseOffset: 0,
+      extentOffset: controller.text.length,
+    );
+
+    // Request focus to automatically highlight the text
+    focusNode.requestFocus();
+    emit(() {});
+  }
 }

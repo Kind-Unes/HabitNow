@@ -2,10 +2,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 
 class TextFieldCubit extends Cubit<void Function()> {
+  TextFieldCubit() : super(() {});
   final TextEditingController controller = TextEditingController();
   final FocusNode focusNode = FocusNode();
 
-  TextFieldCubit() : super(() {});
 
   void initializeTextField() {
     // Set the initial text and highlight it

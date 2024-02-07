@@ -167,63 +167,6 @@
 //   int get hashCode => time.hashCode ^ type.hashCode ^ schedule.hashCode;
 // }
 
-// //? Category Model
-// class CategoryModel {
-//   final Color color;
-//   final IconData icon;
-//   final String name;
-//   CategoryModel({
-//     required this.color,
-//     required this.icon,
-//     required this.name,
-//   });
-
-//   CategoryModel copyWith({
-//     Color? color,
-//     IconData? icon,
-//     String? name,
-//   }) {
-//     return CategoryModel(
-//       color: color ?? this.color,
-//       icon: icon ?? this.icon,
-//       name: name ?? this.name,
-//     );
-//   }
-
-//   Map<String, dynamic> toMap() {
-//     return <String, dynamic>{
-//       'color': color.value,
-//       'icon': icon.codePoint,
-//       'name': name,
-//     };
-//   }
-
-//   factory CategoryModel.fromMap(Map<String, dynamic> map) {
-//     return CategoryModel(
-//       color: Color(map['color'] as int),
-//       icon: IconData(map['icon'] as int, fontFamily: 'MaterialIcons'),
-//       name: map['name'] as String,
-//     );
-//   }
-
-//   String toJson() => json.encode(toMap());
-
-//   factory CategoryModel.fromJson(String source) =>
-//       CategoryModel.fromMap(json.decode(source) as Map<String, dynamic>);
-
-//   @override
-//   String toString() => 'CategoryModel(color: $color, icon: $icon, name: $name)';
-
-//   @override
-//   bool operator ==(covariant CategoryModel other) {
-//     if (identical(this, other)) return true;
-
-//     return other.color == color && other.icon == icon && other.name == name;
-//   }
-
-//   @override
-//   int get hashCode => color.hashCode ^ icon.hashCode ^ name.hashCode;
-// }
 
 // //? ReminderModel
 // // Use Enum better BUT you have to solve the toMap issue :(

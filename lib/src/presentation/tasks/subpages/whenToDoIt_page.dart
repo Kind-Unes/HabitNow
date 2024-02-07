@@ -337,7 +337,7 @@ class RecurringTaskPriorityDialog extends StatelessWidget {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       textFieldCubit.initializeTextField();
-      textFieldCubit.controller.text = ""; //TODO: Here add Ur stuff
+      textFieldCubit.controller.text = "";            //TODO: Here add Ur stuff
     });
 
     return BlocBuilder<NewTaskCubit, NewTaskState>(
