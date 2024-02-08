@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:habit_now/src/cubit/tasks_cubits/addCategory_cubi.dart';
 import 'package:habit_now/src/cubit/tasks_cubits/categories_database_cubit.dart';
-import 'package:habit_now/src/cubit/tasks_cubits/tasks_database_cubit.dart.dart';
 import 'package:habit_now/src/cubit/tasks_cubits/editCategory_cubit.dart';
 import 'package:habit_now/src/presentation/shared/bottomSheets.dart';
 import 'package:habit_now/src/utils/app_static_data.dart';

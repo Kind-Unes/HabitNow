@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:habit_now/src/cubit/tasks_cubits/categories_database_cubit.dart';
-import 'package:habit_now/src/cubit/tasks_cubits/editCategory_cubit.dart';
 import 'package:habit_now/src/utils/const.dart';
 import 'package:habit_now/src/utils/models/task_model.dart';
 

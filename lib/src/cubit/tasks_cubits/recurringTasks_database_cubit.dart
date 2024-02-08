@@ -1,7 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:habit_now/src/utils/boxes.dart';
 import 'package:habit_now/src/utils/models/reccurringTask_model.dart';
-import 'package:habit_now/src/utils/models/task_model.dart';
 
 class RecurringTasksDatabaseCubit extends Cubit<List<ReccurringTaskModel>> {
   RecurringTasksDatabaseCubit() : super([]) {

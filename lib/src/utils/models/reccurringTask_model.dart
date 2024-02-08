@@ -1,5 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:flutter/material.dart';
+import 'package:habit_now/src/utils/models/recurringTasks_enums.dart';
 import 'package:habit_now/src/utils/models/task_model.dart';
 import 'package:hive/hive.dart';
 
@@ -7,49 +7,6 @@ part "reccurringTask_model.g.dart";
 
 // Existing enum definitions...
 
-enum DayOfMonth { first, second, third, fourth, fifth, last }
-
-enum Month {
-  january,
-  february,
-  march,
-  april,
-  may,
-  june,
-  july,
-  august,
-  september,
-  october,
-  november,
-  december,
-}
-
-enum Period { week, month, year }
-
-enum EvaluationProgress {
-  withYesOrNo,
-  withACheckList,
-}
-
-enum DayOfWeek {
-  monday,
-  tuesday,
-  wednesday,
-  thursday,
-  friday,
-  saturday,
-  sunday,
-}
-
-enum WhenToDoItType {
-  specific,
-  flexible,
-}
-
-@HiveType(typeId: 6)
-class ReminderModel {
-  // Add your ReminderModel class properties here
-}
 
 @HiveType(typeId: 7)
 class ReccurringTaskModel {

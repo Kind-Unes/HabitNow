@@ -2,7 +2,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:habit_now/src/cubit/tasks_cubits/tasks_database_cubit.dart.dart';
 import 'package:habit_now/src/utils/const.dart';
 import 'package:habit_now/src/utils/models/task_model.dart';
 import 'package:uuid/uuid.dart';
