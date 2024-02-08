@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:habit_now/src/cubit/tasks_cubits/categories_database_cubit.dart';
+import 'package:habit_now/src/cubit/tasks_cubits/editCategory_cubit.dart';
 import 'package:habit_now/src/utils/const.dart';
 import 'package:habit_now/src/utils/models/task_model.dart';
 
@@ -116,15 +119,17 @@ extension ShowDialogExtension on BuildContext {
 }
 
 extension ShowToast on BuildContext {
-  void showToast(Widget content) {
+  void showToast(Widget content, {Size margin = const Size(0.11, 0.25)}) {
     ScaffoldMessenger.of(this).showSnackBar(SnackBar(
       content: content,
       elevation: 0,
       backgroundColor: const Color.fromARGB(255, 45, 45, 45),
       padding: const EdgeInsets.all(15),
       duration: const Duration(seconds: 2),
-      margin: EdgeInsets.symmetric(
-          vertical: height * 0.11, horizontal: width * 0.25),
+      margin: EdgeInsets.only(
+          bottom: height * margin.height,
+          left: width * margin.width,
+          right: width * margin.width),
       behavior: SnackBarBehavior.floating,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
@@ -186,5 +191,11 @@ extension GetArgs on BuildContext {
 extension OrientationExtension on BuildContext {
   Orientation get orientation {
     return MediaQuery.of(this).orientation;
+  }
+}
+
+extension RefreshCategoriesDB on BuildContext {
+  void refreshDB() {
+    read<CategoriesDatabaseCubit>().getCategories();
   }
 }

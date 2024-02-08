@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:habit_now/src/cubit/tasks_cubits/database_service_cubit.dart';
+import 'package:habit_now/src/cubit/tasks_cubits/tasks_database_cubit.dart.dart';
 import 'package:habit_now/src/cubit/tasks_cubits/new_task_cubit.dart';
 import 'package:habit_now/src/presentation/shared/dialogMessages.dart';
 import 'package:habit_now/src/utils/const.dart';
@@ -783,7 +783,7 @@ class EditTaskCategoryTile extends StatelessWidget {
           color: AppColors.kBackgroundColor,
           child: InkWell(
               onTap: () {
-                context.showDialogMessage(const SelectCategoryDialog());
+                context.showDialogMessage(const NewTaskSelectCategoryDialog());
               },
               child: Container(
                 decoration: const BoxDecoration(

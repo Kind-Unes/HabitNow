@@ -4,43 +4,44 @@ import 'package:habit_now/src/utils/models/task_model.dart';
 
 class CategoriesDatabaseCubit extends Cubit<List<CategoryModel>> {
   CategoriesDatabaseCubit() : super([]) {
-    getTasks();
+    getCategories();
   }
 
   Future<void> createCategory(CategoryModel categoryModel) async {
-    await customCategories.put(categoryModel.id, categoryModel);
+    await customCategoriesBox.put(categoryModel.id, categoryModel);
 
-    print(customCategories.values.length);
+    print(customCategoriesBox.values.length);
   }
 
-  void getTasks() {
-    final data =
-        customCategories.values.map((value) => value as CategoryModel).toList();
+  void getCategories() {
+    final data = customCategoriesBox.values
+        .map((value) => value as CategoryModel)
+        .toList();
     emit(data);
   }
 
-  Future<void> updateTask(CategoryModel updatedTask) async {
-    final index = customCategories.values
+  Future<void> updateCategory(CategoryModel updatedTask) async {
+    final index = customCategoriesBox.values
         .toList()
         .indexWhere((task) => task.id == updatedTask.id);
 
     if (index != -1) {
-      await customCategories.putAt(index, updatedTask);
-      final updatedData = customCategories.values
+      await customCategoriesBox.putAt(index, updatedTask);
+      final updatedData = customCategoriesBox.values
           .map((value) => value as CategoryModel)
           .toList();
       emit(updatedData);
     }
   }
 
-  Future<void> deleteTask(CategoryModel taskToDelete) async {
-    final index = customCategories.values
+  Future<void> deleteCategory(CategoryModel taskToDelete) async {
+    final index = customCategoriesBox.values
         .toList()
         .indexWhere((task) => task.id == taskToDelete.id);
 
     if (index != -1) {
-      await customCategories.deleteAt(index);
-      final updatedData = customCategories.values
+      await customCategoriesBox.deleteAt(index);
+      final updatedData = customCategoriesBox.values
           .map((value) => value as CategoryModel)
           .toList();
       emit(updatedData);

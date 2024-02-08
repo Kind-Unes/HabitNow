@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:habit_now/src/cubit/tasks_cubits/DefineTaskFocusNode_cubit.dart';
-import 'package:habit_now/src/cubit/tasks_cubits/DefineTaskTextController_cubit.dart';
+import 'package:habit_now/src/cubit/tasks_cubits/TextControllers_cubit.dart';
 import 'package:habit_now/src/presentation/tasks/subpages/selectCategory_page.dart';
 import 'package:habit_now/src/presentation/timer/components/timer_widgets.dart';
 import 'package:habit_now/src/utils/const.dart';
@@ -13,12 +12,11 @@ class DefineTaskPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TextEditingController textEditingFeildController =
-        context.read<DefineTaskTextEditingControllerCubit>().myController;
-    final FocusNode firstFocusNode =
-        context.read<DefineTaskFocusNodeCubit>().focusNode;
+        context.read<TextEditingControllerCubit>().controller;
+    final FocusNode firstFocusNode = context.read<FocusNodeCubit>().focusNode;
 
     final FocusNode secondFocusNode =
-        context.read<DefineSecondTaskFocusNodeCubit>().focusNode;
+        context.read<SecondFocusNodeCubit>().focusNode;
 
     return Scaffold(
       body: Stack(
@@ -211,9 +209,12 @@ class DefineTaskPage extends StatelessWidget {
                           if (textEditingFeildController.text.isNotEmpty) {
                             context.pushNamed("/recurring_task/how_often");
                           } else {
-                            context.showToast(const ToastWidget(
+                            context.showToast(
+                              const ToastWidget(
                               text: "Enter a name",
-                            ));
+                            ),
+                            
+                            );
                           }
                         },
                         child: Container(

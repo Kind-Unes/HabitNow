@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:habit_now/src/cubit/tasks_cubits/addCategory_cubiy.dart';
+import 'package:habit_now/src/cubit/tasks_cubits/addCategory_cubi.dart';
 import 'package:habit_now/src/cubit/tasks_cubits/categories_database_cubit.dart';
+import 'package:habit_now/src/cubit/tasks_cubits/editCategory_cubit.dart';
 import 'package:habit_now/src/presentation/shared/dialogMessages.dart';
 import 'package:habit_now/src/presentation/tasks/subpages/newCategory_page.dart';
 import 'package:habit_now/src/presentation/timer/components/timer_widgets.dart';
-import 'package:habit_now/src/utils/boxes.dart';
 import 'package:habit_now/src/utils/const.dart';
 import 'package:habit_now/src/utils/extentions.dart';
 import 'package:habit_now/src/utils/models/task_model.dart';
@@ -67,10 +67,7 @@ class NewCategoryBottomSheetTile extends StatelessWidget {
 class NewCategoryBottomSheetTileButton extends StatelessWidget {
   const NewCategoryBottomSheetTileButton({
     super.key,
-    required this.categoryModel,
   });
-
-  final CategoryModel categoryModel;
 
   @override
   Widget build(BuildContext context) {
@@ -78,15 +75,29 @@ class NewCategoryBottomSheetTileButton extends StatelessWidget {
         color: AppColors.kBackgroundColor,
         child: InkWell(
             onTap: () {
-              // add to data base
-              context.read<CategoriesDatabaseCubit>().createCategory(
-                  context.read<NewCategoryCubit>().state.categoryModel);
-              // get data list
-              context.read<CategoriesDatabaseCubit>().getTasks();
-              //pop
-              context.pop();
+              if (!(context.read<NewCategoryCubit>().state.categoryModel.name ==
+                  "New category")) {
+                // add to data base
+                context.read<CategoriesDatabaseCubit>().createCategory(
+                    context.read<NewCategoryCubit>().state.categoryModel);
 
-              print(customCategories.values.length);
+                // get data list
+
+                context.refreshDB();
+                //pop
+                context.pop();
+              } else {
+                context.showToast(
+                    Text(
+                      "Pleae provide a name to your new category",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: context.fontSize),
+                    ),
+                    margin: const Size(0.1, 0.1));
+              }
             },
             child: Container(
                 decoration: const BoxDecoration(
@@ -137,12 +148,17 @@ class NewCategoryBottomSheetFirstTile extends StatelessWidget {
             SizedBox(
               width: context.width * 0.032,
             ),
-            Text(
-              category.name,
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: context.fontSize,
-                  fontWeight: FontWeight.bold),
+            SizedBox(
+              height: context.height * 0.03,
+              width: context.height * 0.3,
+              child: Text(
+                category.name,
+                style: TextStyle(
+                    color: Colors.white,
+                    overflow: TextOverflow.ellipsis,
+                    fontSize: context.fontSize,
+                    fontWeight: FontWeight.bold),
+              ),
             ),
             const Spacer(),
             Container(
@@ -258,36 +274,99 @@ class NewCategoryBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        NewCategoryBottomSheetFirstTile(category: category),
-        NewCategoryBottomSheetTile(
-          icon: Icons.mode_edit_outline_outlined,
-          title: 'Category name',
-          function: () {
-            context.showDialogMessage(const CategoryTextDialog());
-          },
+    return SizedBox(
+      height: context.height * 0.43,
+      child: Scaffold(
+        body: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              NewCategoryBottomSheetFirstTile(category: category),
+              NewCategoryBottomSheetTile(
+                icon: Icons.mode_edit_outline_outlined,
+                title: 'Category name',
+                function: () {
+                  context.showDialogMessage(const NewCategoryTextDialog());
+                },
+              ),
+              NewCategoryBottomSheetTile(
+                icon: Icons.image_outlined,
+                title: 'Category icon',
+                function: () {
+                  context.showDialogMessage(const NewCategoryIconDialog());
+                },
+              ),
+              NewCategoryBottomSheetTile(
+                icon: Icons.invert_colors_outlined,
+                title: 'Category color',
+                function: () {
+                  context.showDialogMessage(const NewCategoryColorDialog());
+                },
+              ),
+              const NewCategoryBottomSheetTileButton()
+            ],
+          ),
         ),
-        NewCategoryBottomSheetTile(
-          icon: Icons.image_outlined,
-          title: 'Category icon',
-          function: () {
-            context.showDialogMessage(const NewCategoryIconDialog());
-          },
-        ),
-        NewCategoryBottomSheetTile(
-          icon: Icons.invert_colors_outlined,
-          title: 'Category color',
-          function: () {
-            context.showDialogMessage(const NewCategoryColorDialog());
-          },
-        ),
-        NewCategoryBottomSheetTileButton(
-          categoryModel: category,
-        )
-      ],
+      ),
+    );
+  }
+}
+
+class EditCategoryBottomSheet extends StatelessWidget {
+  const EditCategoryBottomSheet({
+    super.key,
+    required this.category,
+  });
+
+  final CategoryModel category;
+
+  @override
+  Widget build(BuildContext context) {
+    //initEditState
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<EditCategoryCubit>().initState(category);
+    });
+
+    return BlocBuilder<EditCategoryCubit, EditCategoryState>(
+      builder: (context, category) {
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            NewCategoryBottomSheetFirstTile(category: category.categoryModel),
+            NewCategoryBottomSheetTile(
+              icon: Icons.mode_edit_outline_outlined,
+              title: 'Category name',
+              function: () {
+                context.showDialogMessage(const EditCategoryTextDialog());
+              },
+            ),
+            NewCategoryBottomSheetTile(
+              icon: Icons.image_outlined,
+              title: 'Category icon',
+              function: () {
+                context.showDialogMessage(const EditCategoryIconDialog());
+              },
+            ),
+            NewCategoryBottomSheetTile(
+              icon: Icons.invert_colors_outlined,
+              title: 'Category color',
+              function: () {
+                context.showDialogMessage(const EditCategoryColorDialog());
+              },
+            ),
+            NewCategoryBottomSheetTile(
+              icon: Icons.delete_outline_outlined,
+              title: 'Delete category',
+              function: () async {
+                context.showDialogMessage(
+                    DeleteVerificationDialog(category: category.categoryModel));
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

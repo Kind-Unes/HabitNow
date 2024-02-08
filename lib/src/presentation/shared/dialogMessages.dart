@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:habit_now/src/cubit/tasks_cubits/addCategory_cubiy.dart';
+import 'package:habit_now/src/cubit/tasks_cubits/TextControllers_cubit.dart';
+import 'package:habit_now/src/cubit/tasks_cubits/addCategory_cubi.dart';
+import 'package:habit_now/src/cubit/tasks_cubits/categories_database_cubit.dart';
+import 'package:habit_now/src/cubit/tasks_cubits/editCategory_cubit.dart';
 import 'package:habit_now/src/cubit/tasks_cubits/new_task_cubit.dart';
 import 'package:habit_now/src/presentation/tasks/subpages/newCategory_page.dart';
 import 'package:habit_now/src/utils/app_static_data.dart';
@@ -11,7 +14,10 @@ import 'package:habit_now/src/utils/models/task_model.dart';
 class CategoryButton extends StatelessWidget {
   const CategoryButton({
     super.key,
+    required this.categoryModel,
   });
+
+  final CategoryModel categoryModel;
 
   @override
   Widget build(BuildContext context) {
@@ -32,12 +38,18 @@ class CategoryButton extends StatelessWidget {
                 height: context.height * 0.055,
                 width: context.height * 0.055,
                 decoration: BoxDecoration(
-                    color: Colors.red, borderRadius: BorderRadius.circular(10)),
-                child: const Icon(Icons.money),
+                    color: categoryModel.color,
+                    borderRadius: BorderRadius.circular(10)),
+                child: Icon(categoryModel.icon),
               ),
-              Text(
-                "Art",
-                style: TextStyle(fontSize: context.fontSize * 0.72),
+              SizedBox(
+                height: context.height * 0.04,
+                child: Text(
+                  categoryModel.name,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: context.fontSize * 0.72),
+                ),
               )
             ],
           ),
@@ -162,8 +174,8 @@ class DialogButton extends StatelessWidget {
   }
 }
 
-class SelectCategoryDialog extends StatelessWidget {
-  const SelectCategoryDialog({
+class NewTaskSelectCategoryDialog extends StatelessWidget {
+  const NewTaskSelectCategoryDialog({
     super.key,
   });
 
@@ -194,90 +206,20 @@ class SelectCategoryDialog extends StatelessWidget {
             SizedBox(
               height: context.height * 0.37,
               child: SingleChildScrollView(
-                child: Column(children: [
-                  Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: context.width * 0.05),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                child: BlocBuilder<CategoriesDatabaseCubit, List>(
+                  builder: (context, customCategoiresList) {
+                    return Wrap(
                       children: [
-                        CategoryButton(),
-                        CategoryButton(),
-                        CategoryButton(),
+                        ...categories
+                            .map((e) => CategoryButton(categoryModel: e))
+                            .toList(),
+                        ...customCategoiresList
+                            .map((e) => CategoryButton(categoryModel: e))
+                            .toList(),
                       ],
-                    ),
-                  ),
-                  Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: context.width * 0.05),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        CategoryButton(),
-                        CategoryButton(),
-                        CategoryButton(),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: context.width * 0.05),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        CategoryButton(),
-                        CategoryButton(),
-                        CategoryButton(),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: context.width * 0.05),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        CategoryButton(),
-                        CategoryButton(),
-                        CategoryButton(),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: context.width * 0.05),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        CategoryButton(),
-                        CategoryButton(),
-                        CategoryButton(),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: context.width * 0.05),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        CategoryButton(),
-                        CategoryButton(),
-                        CategoryButton(),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: context.width * 0.05),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        CategoryButton(),
-                      ],
-                    ),
-                  ),
-                ]),
+                    );
+                  },
+                ),
               ),
             ),
             InkWell(
@@ -568,8 +510,109 @@ class TextDialog extends StatelessWidget {
   }
 }
 
-class CategoryTextDialog extends StatelessWidget {
-  const CategoryTextDialog({
+// TODO: Generlize it OR Recreate other one + renames
+class DeleteVerificationDialog extends StatelessWidget {
+  const DeleteVerificationDialog({
+    super.key,
+    required this.category,
+  });
+
+  final CategoryModel category;
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      elevation: 0,
+      backgroundColor: AppColors.kBackgroundColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16.0),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: EdgeInsets.only(
+                top: context.fontSize * 1,
+                left: context.fontSize * 1,
+                right: context.fontSize * 1,
+                bottom: context.fontSize * 0.5),
+            child: Center(
+                child: Text(
+              "Delete category",
+              style: TextStyle(color: Colors.red, fontSize: context.fontSize),
+            )),
+          ),
+          const Divider(
+            color: Color.fromARGB(255, 66, 66, 66),
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: InkWell(
+                  onTap: () {
+                    context.pop();
+                  },
+                  borderRadius:
+                      const BorderRadius.only(bottomLeft: Radius.circular(16)),
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      borderRadius:
+                          BorderRadius.only(bottomLeft: Radius.circular(16)),
+                    ),
+                    width: context.width * 0.398,
+                    height: context.height * 0.056,
+                    child: const Center(
+                        child: Text(
+                      "CANCEL",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16),
+                    )),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: InkWell(
+                  onTap: () {
+                    context
+                        .read<CategoriesDatabaseCubit>()
+                        .deleteCategory(category);
+                    //first for the dialogMessage
+                    context.pop();
+                    //second for the bottomSheet
+                    context.pop();
+                  },
+                  borderRadius:
+                      const BorderRadius.only(bottomRight: Radius.circular(16)),
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      borderRadius:
+                          BorderRadius.only(bottomRight: Radius.circular(16)),
+                    ),
+                    width: context.width * 0.398,
+                    height: context.height * 0.056,
+                    child: const Center(
+                        child: Text(
+                      "OK",
+                      style: TextStyle(
+                          color: AppColors.kLightPurple,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16),
+                    )),
+                  ),
+                ),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class NewCategoryTextDialog extends StatelessWidget {
+  const NewCategoryTextDialog({
     super.key,
   });
 
@@ -577,6 +620,7 @@ class CategoryTextDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final TextEditingController textEditingController = TextEditingController(
         text: context.read<NewCategoryCubit>().state.categoryModel.name);
+
     return Dialog(
       elevation: 0,
       backgroundColor: AppColors.kBackgroundColor,
@@ -690,6 +734,147 @@ class CategoryTextDialog extends StatelessWidget {
           )
         ],
       ),
+    );
+  }
+}
+
+class EditCategoryTextDialog extends StatelessWidget {
+  const EditCategoryTextDialog({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final TextEditingControllerCubit textEditingControllerCubit =
+        context.read<TextEditingControllerCubit>();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      textEditingControllerCubit.updateController(TextEditingController(
+          text: context.read<EditCategoryCubit>().state.categoryModel.name));
+    });
+
+    return BlocBuilder<TextEditingControllerCubit, TextEditingControllerState>(
+      builder: (context, state) {
+        return Dialog(
+          elevation: 0,
+          backgroundColor: AppColors.kBackgroundColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.0),
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                    padding: EdgeInsets.only(
+                        top: context.fontSize * 1,
+                        left: context.fontSize * 1,
+                        right: context.fontSize * 1,
+                        bottom: context.fontSize * 0.5),
+                    child: TextField(
+                      onChanged: (newText) {
+                        // changing this shit with a variable
+                        context
+                            .read<EditCategoryCubit>()
+                            .updateProperty(name: newText);
+
+                        context.refreshDB();
+                      },
+                      maxLines: 5,
+                      minLines: 3,
+                      controller: state.textEditingController,
+                      style: TextStyle(fontSize: context.fontSize * 1.1),
+                      autofocus: true,
+                      autocorrect: true,
+                      cursorColor: AppColors.kLightPurple,
+                      cursorHeight: context.height * 0.03,
+                      decoration: InputDecoration(
+                        isDense: true,
+                        labelText: "name",
+                        labelStyle: TextStyle(
+                            fontSize: context.fontSize,
+                            color: AppColors.kLightPurple),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              color: AppColors.kLightPurple, width: 2.0),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        disabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              color: AppColors.kLightPurple, width: 2.0),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        border: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              color: AppColors.kLightPurple, width: 2.0),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              color: AppColors.kLightPurple, width: 2.0),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                    )),
+                Row(
+                  children: [
+                    Expanded(
+                      child: InkWell(
+                        onTap: () {
+                          context.pop();
+                        },
+                        borderRadius: const BorderRadius.only(
+                            bottomLeft: Radius.circular(16)),
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(16)),
+                          ),
+                          width: context.width * 0.398,
+                          height: context.height * 0.056,
+                          child: const Center(
+                              child: Text(
+                            "CANCEL",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16),
+                          )),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: InkWell(
+                        onTap: () {
+                          // reinitialize text controllers
+                          context.pop();
+                        },
+                        borderRadius: const BorderRadius.only(
+                            bottomRight: Radius.circular(16)),
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                                bottomRight: Radius.circular(16)),
+                          ),
+                          width: context.width * 0.398,
+                          height: context.height * 0.056,
+                          child: const Center(
+                              child: Text(
+                            "OK",
+                            style: TextStyle(
+                                color: AppColors.kLightPurple,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16),
+                          )),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }
@@ -1236,6 +1421,77 @@ class NewCategoryColorDialog extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16.0),
       ),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: 18.0),
+            Text(
+              'Category color',
+              style: TextStyle(
+                  fontSize: context.fontSize * 0.85,
+                  color: Colors.white.withOpacity(0.8),
+                  fontWeight: FontWeight.normal),
+            ),
+            const SizedBox(height: 10.0),
+            const Divider(
+              color: Color.fromARGB(255, 46, 46, 46),
+            ),
+            SizedBox(
+              height: context.height * 0.37,
+              child: SingleChildScrollView(
+                child: Column(children: [
+                  Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: context.width * 0.05),
+                      child: Wrap(
+                          children: customCategoriesColors
+                              .map((e) => NewCategoryColorButton(color: e))
+                              .toList())),
+                ]),
+              ),
+            ),
+            InkWell(
+                onTap: () {
+                  context.pop();
+                },
+                child: Container(
+                  height: context.height * 0.07,
+                  decoration: const BoxDecoration(
+                      border: Border(
+                          top: BorderSide(
+                              color: Color.fromARGB(255, 79, 79, 79),
+                              width: 0.3))),
+                  child: Center(
+                    child: Text(
+                      "CLOSE",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: context.fontSize * 00.85),
+                    ),
+                  ),
+                )),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class EditCategoryColorDialog extends StatelessWidget {
+  const EditCategoryColorDialog({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      elevation: 0,
+      backgroundColor: AppColors.kBackgroundColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16.0),
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -1260,7 +1516,7 @@ class NewCategoryColorDialog extends StatelessWidget {
                         EdgeInsets.symmetric(horizontal: context.width * 0.05),
                     child: Wrap(
                         children: customCategoriesColors
-                            .map((e) => CategoryColorButton(color: e))
+                            .map((e) => EditCategoryColorButton(color: e))
                             .toList())),
               ]),
             ),

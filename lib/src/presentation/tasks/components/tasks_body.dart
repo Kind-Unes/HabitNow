@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:habit_now/src/cubit/tasks_cubits/database_service_cubit.dart';
+import 'package:habit_now/src/cubit/tasks_cubits/tasks_database_cubit.dart.dart';
 import 'package:habit_now/src/utils/const.dart';
 import 'package:habit_now/src/utils/extentions.dart';
 import 'package:habit_now/src/utils/models/task_model.dart';

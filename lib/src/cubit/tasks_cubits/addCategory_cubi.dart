@@ -47,21 +47,3 @@ class NewCategoryCubit extends Cubit<NewCategoryState> {
   //! implement more if needed
 }
 
-// class EditTaskControllerCubit extends Cubit<void Function()> {
-//   EditTaskControllerCubit() : super(() {});
-//   final TextEditingController controller = TextEditingController();
-//   final FocusNode focusNode = FocusNode();
-
-//   void initializeTextField(String text) {
-//     // Set the initial text and highlight it
-//     controller.text = text;
-//     controller.selection = TextSelection(
-//       baseOffset: 0,
-//       extentOffset: controller.text.length,
-//     );
-
-//     // Request focus to automatically highlight the text
-//     focusNode.requestFocus();
-//     emit(() {});
-//   }
-// }

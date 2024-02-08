@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:habit_now/src/cubit/tasks_cubits/categories_database_cubit.dart';
 import 'package:habit_now/src/utils/app_static_data.dart';
 import 'package:habit_now/src/utils/const.dart';
 import 'package:habit_now/src/utils/extentions.dart';
@@ -9,8 +11,6 @@ class SelectCategoryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
-
     return Scaffold(
       body: Stack(
         children: [
@@ -28,84 +28,18 @@ class SelectCategoryPage extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: context.height * 0.03),
-                  Wrap(children: [
-                    ...categories.map((category) =>
-                        SelectCategoryWrapTile(categoryModel: category)),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        vertical: context.height * 0.007,
-                        horizontal: context.width * 0.015,
-                      ),
-                      child: Material(
-                        borderRadius:
-                            BorderRadius.circular(context.width * 0.02),
-                        color: const Color.fromARGB(255, 33, 33, 33),
-                        child: InkWell(
-                          onTap: () {},
-                          borderRadius:
-                              BorderRadius.circular(context.width * 0.02),
-                          child: Container(
-                            height: context.height * 0.075,
-                            width: context.width / 2 - context.width * 0.03,
-                            decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.circular(context.width * 0.02),
-                            ),
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: context.width * 0.03),
-                              child: Row(
-                                children: [
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      SizedBox(
-                                        width: (context.width / 2 -
-                                                context.width * 0.04) *
-                                            0.61,
-                                        child: Text(
-                                          "Create Category",
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            overflow: TextOverflow.ellipsis,
-                                            fontSize: context.fontSize / 1.25,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: (context.width / 2 -
-                                                context.width * 0.04) *
-                                            0.61,
-                                        child: Text(
-                                          "3 available",
-                                          style: TextStyle(
-                                            color:
-                                                Colors.white.withOpacity(0.5),
-                                            overflow: TextOverflow.ellipsis,
-                                            fontSize: context.fontSize / 1.25,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  const Spacer(),
-                                  Icon(
-                                    Icons.add_circle_outline_sharp,
-                                    color:
-                                        const Color.fromARGB(255, 95, 95, 95),
-                                    size: context.fontSize * 2.1,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    // Add more widgets as needed
-                  ]),
+                  BlocBuilder<CategoriesDatabaseCubit, List>(
+                    builder: (context, customCategoriesList) {
+                      return Wrap(children: [
+                        ...categories.map((category) =>
+                            SelectCategoryWrapTile(categoryModel: category)),
+                        ...customCategoriesList.map(
+                            (e) => SelectCategoryWrapTile(categoryModel: e)),
+                        const ReccuringTaskCreateCategoryButton(),
+                        // Add more widgets as needed
+                      ]);
+                    },
+                  ),
                   SizedBox(
                     height: context.height * 0.1,
                   )
@@ -170,6 +104,99 @@ class SelectCategoryPage extends StatelessWidget {
                 )),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class ReccuringTaskCreateCategoryButton extends StatelessWidget {
+  const ReccuringTaskCreateCategoryButton({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        vertical: context.height * 0.007,
+        horizontal: context.width * 0.015,
+      ),
+      child: Material(
+        borderRadius: BorderRadius.circular(context.width * 0.02),
+        color: const Color.fromARGB(255, 33, 33, 33),
+        child: InkWell(
+          onTap: () {
+            if (!(6 - context.read<CategoriesDatabaseCubit>().state.length ==
+                0)) {
+              context.pushNamed("/categories");
+            } else {
+              context.showToast(
+                  const Center(
+                    child: Text(
+                      "You can't have more then 5 custom categories",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 255, 255, 255),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  margin: const Size(0.2, 0.15));
+            }
+          },
+          borderRadius: BorderRadius.circular(context.width * 0.02),
+          child: Container(
+            height: context.height * 0.075,
+            width: context.width / 2 - context.width * 0.03,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(context.width * 0.02),
+            ),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: context.width * 0.03),
+              child: Row(
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width:
+                            (context.width / 2 - context.width * 0.04) * 0.61,
+                        child: Text(
+                          "Create Category",
+                          style: TextStyle(
+                            color: Colors.white,
+                            overflow: TextOverflow.ellipsis,
+                            fontSize: context.fontSize / 1.25,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width:
+                            (context.width / 2 - context.width * 0.04) * 0.61,
+                        child: Text(
+                          "${6 - context.read<CategoriesDatabaseCubit>().state.length} Availables ",
+                          style: TextStyle(
+                            color: Colors.white.withOpacity(0.5),
+                            overflow: TextOverflow.ellipsis,
+                            fontSize: context.fontSize / 1.25,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const Spacer(),
+                  Icon(
+                    Icons.add_circle_outline_sharp,
+                    color: const Color.fromARGB(255, 95, 95, 95),
+                    size: context.fontSize * 2.1,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }

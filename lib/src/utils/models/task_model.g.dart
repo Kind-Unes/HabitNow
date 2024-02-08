@@ -143,7 +143,6 @@ class CategoryModelAdapter extends TypeAdapter<CategoryModel> {
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
-
 class IconDataAdapter extends TypeAdapter<IconData> {
   @override
   final int typeId =
