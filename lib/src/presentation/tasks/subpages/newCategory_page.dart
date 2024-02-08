@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:habit_now/src/cubit/tasks_cubits/addCategory_cubiy.dart';
 import 'package:habit_now/src/cubit/tasks_cubits/categories_database_cubit.dart';
 import 'package:habit_now/src/presentation/shared/bottomSheets.dart';
+import 'package:habit_now/src/utils/app_static_data.dart';
 import 'package:habit_now/src/utils/const.dart';
 import 'package:habit_now/src/utils/extentions.dart';
-import 'package:habit_now/src/utils/models/category_model.dart';
 import 'package:habit_now/src/utils/models/task_model.dart';
 
 class CategoriesPage extends StatelessWidget {
@@ -12,6 +13,10 @@ class CategoriesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Todo : add init stuff
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<CategoriesDatabaseCubit>().getTasks();
+    });
     return Scaffold(
       appBar: NewCategoryAppBar(
         context: context,
@@ -69,6 +74,7 @@ class CategoriesPage extends StatelessWidget {
                                 color: categoreyModel[index].color,
                                 icon: categoreyModel[index].icon,
                                 name: categoreyModel[index].name,
+                                id: categoreyModel[index].id,
                               ),
                             );
                           },
@@ -114,6 +120,7 @@ class CategoriesPage extends StatelessWidget {
                           color: e.color,
                           icon: e.icon,
                           name: e.name,
+                          id: e.id,
                         ),
                       );
                     }).toList(),
@@ -132,11 +139,19 @@ class CategoriesPage extends StatelessWidget {
                 color: AppColors.kLightPurple,
                 child: InkWell(
                   onTap: () {
-                    context.showBottmSheet(NewCategoryBottomSheet(
-                        category: CategoryModel(
-                            color: AppColors.kLightPurple,
-                            name: "New category",
-                            icon: Icons.category)));
+                    context.read<NewCategoryCubit>().initState();
+
+                    context.showBottmSheet(
+                        BlocBuilder<NewCategoryCubit, NewCategoryState>(
+                      builder: (context, categoryModel) {
+                        return NewCategoryBottomSheet(
+                            category: CategoryModel(
+                                color: categoryModel.categoryModel.color,
+                                name: categoryModel.categoryModel.name,
+                                icon: categoryModel.categoryModel.icon,
+                                id: ''));
+                      },
+                    ));
                   },
                   borderRadius: BorderRadius.circular(context.fontSize * 1.1),
                   child: Container(
@@ -203,12 +218,18 @@ class CategoryListViewElement extends StatelessWidget {
                     size: context.fontSize * 2.2,
                   ),
                 ),
-                Text(
-                  category.name,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: context.fontSize * 0.85,
+                SizedBox(
+                  width: context.width * 0.25,
+                  height: context.height * 0.03,
+                  child: Text(
+                    category.name,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.white,
+                      overflow: TextOverflow.ellipsis,
+                      fontWeight: FontWeight.bold,
+                      fontSize: context.fontSize * 0.8,
+                    ),
                   ),
                 ),
                 Text(
@@ -240,171 +261,69 @@ class NewCategoryIconDialog extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16.0),
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const SizedBox(height: 18.0),
-          Text(
-            'Category icon',
-            style: TextStyle(
-                fontSize: context.fontSize * 0.85,
-                color: Colors.white.withOpacity(0.8),
-                fontWeight: FontWeight.normal),
+      child: const CategoryIconDialog(),
+    );
+  }
+}
+
+class CategoryIconDialog extends StatelessWidget {
+  const CategoryIconDialog({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const SizedBox(height: 18.0),
+        Text(
+          'Category icon',
+          style: TextStyle(
+              fontSize: context.fontSize * 0.85,
+              color: Colors.white.withOpacity(0.8),
+              fontWeight: FontWeight.normal),
+        ),
+        const SizedBox(height: 10.0),
+        const Divider(
+          color: Color.fromARGB(255, 46, 46, 46),
+        ),
+        SizedBox(
+          height: context.height * 0.37,
+          child: SingleChildScrollView(
+            child: Column(children: [
+              Padding(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: context.width * 0.05),
+                  child: Wrap(
+                    children: customCategoriesIcons.map((e) {
+                      return CategoryIconButton(icon: e);
+                    }).toList(),
+                  )),
+            ]),
           ),
-          const SizedBox(height: 10.0),
-          const Divider(
-            color: Color.fromARGB(255, 46, 46, 46),
-          ),
-          SizedBox(
-            height: context.height * 0.37,
-            child: SingleChildScrollView(
-              child: Column(children: [
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: context.width * 0.05),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      CategoryIconButton(
-                        icon: Icons.baby_changing_station,
-                      ),
-                      CategoryIconButton(
-                        icon: Icons.baby_changing_station,
-                      ),
-                      CategoryIconButton(
-                        icon: Icons.baby_changing_station,
-                      ),
-                    ],
-                  ),
+        ),
+        InkWell(
+            onTap: () {
+              context.pop();
+            },
+            child: Container(
+              height: context.height * 0.07,
+              decoration: const BoxDecoration(
+                  border: Border(
+                      top: BorderSide(
+                          color: Color.fromARGB(255, 79, 79, 79), width: 0.3))),
+              child: Center(
+                child: Text(
+                  "CLOSE",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: context.fontSize * 00.85),
                 ),
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: context.width * 0.05),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      CategoryIconButton(
-                        icon: Icons.baby_changing_station,
-                      ),
-                      CategoryIconButton(
-                        icon: Icons.baby_changing_station,
-                      ),
-                      CategoryIconButton(
-                        icon: Icons.baby_changing_station,
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: context.width * 0.05),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      CategoryIconButton(
-                        icon: Icons.baby_changing_station,
-                      ),
-                      CategoryIconButton(
-                        icon: Icons.baby_changing_station,
-                      ),
-                      CategoryIconButton(
-                        icon: Icons.baby_changing_station,
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: context.width * 0.05),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      CategoryIconButton(
-                        icon: Icons.baby_changing_station,
-                      ),
-                      CategoryIconButton(
-                        icon: Icons.baby_changing_station,
-                      ),
-                      CategoryIconButton(
-                        icon: Icons.baby_changing_station,
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: context.width * 0.05),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      CategoryIconButton(
-                        icon: Icons.baby_changing_station,
-                      ),
-                      CategoryIconButton(
-                        icon: Icons.baby_changing_station,
-                      ),
-                      CategoryIconButton(
-                        icon: Icons.baby_changing_station,
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: context.width * 0.05),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      CategoryIconButton(
-                        icon: Icons.baby_changing_station,
-                      ),
-                      CategoryIconButton(
-                        icon: Icons.baby_changing_station,
-                      ),
-                      CategoryIconButton(
-                        icon: Icons.baby_changing_station,
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: context.width * 0.05),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      CategoryIconButton(
-                        icon: Icons.baby_changing_station,
-                      ),
-                    ],
-                  ),
-                ),
-              ]),
-            ),
-          ),
-          InkWell(
-              onTap: () {
-                context.pop();
-              },
-              child: Container(
-                height: context.height * 0.07,
-                decoration: const BoxDecoration(
-                    border: Border(
-                        top: BorderSide(
-                            color: Color.fromARGB(255, 79, 79, 79),
-                            width: 0.3))),
-                child: Center(
-                  child: Text(
-                    "CLOSE",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: context.fontSize * 00.85),
-                  ),
-                ),
-              )),
-        ],
-      ),
+              ),
+            )),
+      ],
     );
   }
 }
@@ -420,6 +339,7 @@ class CategoryIconButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
+        context.read<NewCategoryCubit>().updateProperty(icon: icon);
         context.pop();
       },
       child: SizedBox(
@@ -431,7 +351,7 @@ class CategoryIconButton extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
-                Icons.baby_changing_station,
+                icon,
                 size: context.fontSize * 2.6,
                 color: const Color.fromARGB(255, 186, 186, 186),
               ),
@@ -541,6 +461,8 @@ class CategoryColorButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
+        context.read<NewCategoryCubit>().updateProperty(color: color);
+
         context.pop();
       },
       child: SizedBox(

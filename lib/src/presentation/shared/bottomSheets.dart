@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:habit_now/src/cubit/tasks_cubits/addCategory_cubiy.dart';
+import 'package:habit_now/src/cubit/tasks_cubits/categories_database_cubit.dart';
 import 'package:habit_now/src/presentation/shared/dialogMessages.dart';
 import 'package:habit_now/src/presentation/tasks/subpages/newCategory_page.dart';
 import 'package:habit_now/src/presentation/timer/components/timer_widgets.dart';
+import 'package:habit_now/src/utils/boxes.dart';
 import 'package:habit_now/src/utils/const.dart';
 import 'package:habit_now/src/utils/extentions.dart';
 import 'package:habit_now/src/utils/models/task_model.dart';
@@ -62,7 +66,8 @@ class NewCategoryBottomSheetTile extends StatelessWidget {
 
 class NewCategoryBottomSheetTileButton extends StatelessWidget {
   const NewCategoryBottomSheetTileButton({
-    super.key, required this.categoryModel,
+    super.key,
+    required this.categoryModel,
   });
 
   final CategoryModel categoryModel;
@@ -73,14 +78,15 @@ class NewCategoryBottomSheetTileButton extends StatelessWidget {
         color: AppColors.kBackgroundColor,
         child: InkWell(
             onTap: () {
-
-              
               // add to data base
-              // + you should refresh the main page and implement a refreshing function or getCategories function
-              // re initialize the NEWCATEGORY CUBIT + CREATE IT FIRST
-              // WRAP
-              // ADD TO UI STUFF
-              // POP
+              context.read<CategoriesDatabaseCubit>().createCategory(
+                  context.read<NewCategoryCubit>().state.categoryModel);
+              // get data list
+              context.read<CategoriesDatabaseCubit>().getTasks();
+              //pop
+              context.pop();
+
+              print(customCategories.values.length);
             },
             child: Container(
                 decoration: const BoxDecoration(
@@ -146,7 +152,7 @@ class NewCategoryBottomSheetFirstTile extends StatelessWidget {
                   color: category.color,
                   borderRadius: BorderRadius.circular(context.height * 0.015)),
               child: Icon(
-                Icons.category,
+                category.icon,
                 size: context.fontSize * 1.5,
               ),
             ),
@@ -261,9 +267,7 @@ class NewCategoryBottomSheet extends StatelessWidget {
           icon: Icons.mode_edit_outline_outlined,
           title: 'Category name',
           function: () {
-            context.showDialogMessage(const TextDialog(
-              label: 'Category',
-            ));
+            context.showDialogMessage(const CategoryTextDialog());
           },
         ),
         NewCategoryBottomSheetTile(
@@ -280,7 +284,9 @@ class NewCategoryBottomSheet extends StatelessWidget {
             context.showDialogMessage(const NewCategoryColorDialog());
           },
         ),
-        const NewCategoryBottomSheetTileButton()
+        NewCategoryBottomSheetTileButton(
+          categoryModel: category,
+        )
       ],
     );
   }

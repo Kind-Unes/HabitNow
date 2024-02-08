@@ -112,6 +112,7 @@ class CategoryModelAdapter extends TypeAdapter<CategoryModel> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return CategoryModel(
+      id: fields[3] as String,
       color: fields[0] as Color,
       icon: fields[1] as IconData,
       name: fields[2] as String,
@@ -121,13 +122,15 @@ class CategoryModelAdapter extends TypeAdapter<CategoryModel> {
   @override
   void write(BinaryWriter writer, CategoryModel obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.color)
       ..writeByte(1)
       ..write(obj.icon)
       ..writeByte(2)
-      ..write(obj.name);
+      ..write(obj.name)
+      ..writeByte(3)
+      ..write(obj.id);
   }
 
   @override
@@ -143,7 +146,8 @@ class CategoryModelAdapter extends TypeAdapter<CategoryModel> {
 
 class IconDataAdapter extends TypeAdapter<IconData> {
   @override
-  final typeId = 6; // You can choose any unique positive integer as typeId
+  final int typeId =
+      99; // You can choose any unique positive integer as the type ID
 
   @override
   IconData read(BinaryReader reader) {
@@ -152,7 +156,7 @@ class IconDataAdapter extends TypeAdapter<IconData> {
   }
 
   @override
-  void write(BinaryWriter writer, IconData obj) {
-    writer.writeInt(obj.codePoint);
+  void write(BinaryWriter writer, IconData value) {
+    writer.writeInt(value.codePoint);
   }
 }

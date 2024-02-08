@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:habit_now/src/cubit/tasks_cubits/addCategory_cubiy.dart';
 import 'package:habit_now/src/cubit/tasks_cubits/new_task_cubit.dart';
 import 'package:habit_now/src/presentation/tasks/subpages/newCategory_page.dart';
 import 'package:habit_now/src/presentation/tasks/subpages/newTask_page.dart';
+import 'package:habit_now/src/utils/app_static_data.dart';
 import 'package:habit_now/src/utils/const.dart';
 import 'package:habit_now/src/utils/extentions.dart';
 import 'package:habit_now/src/utils/models/task_model.dart';
@@ -507,6 +509,132 @@ class TextDialog extends StatelessWidget {
               },
             ),
           ),
+          Row(
+            children: [
+              Expanded(
+                child: InkWell(
+                  onTap: () {
+                    context.pop();
+                  },
+                  borderRadius:
+                      const BorderRadius.only(bottomLeft: Radius.circular(16)),
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      borderRadius:
+                          BorderRadius.only(bottomLeft: Radius.circular(16)),
+                    ),
+                    width: context.width * 0.398,
+                    height: context.height * 0.056,
+                    child: const Center(
+                        child: Text(
+                      "CANCEL",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16),
+                    )),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: InkWell(
+                  onTap: () {
+                    context.pop();
+                  },
+                  borderRadius:
+                      const BorderRadius.only(bottomRight: Radius.circular(16)),
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      borderRadius:
+                          BorderRadius.only(bottomRight: Radius.circular(16)),
+                    ),
+                    width: context.width * 0.398,
+                    height: context.height * 0.056,
+                    child: const Center(
+                        child: Text(
+                      "OK",
+                      style: TextStyle(
+                          color: AppColors.kLightPurple,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16),
+                    )),
+                  ),
+                ),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class CategoryTextDialog extends StatelessWidget {
+  const CategoryTextDialog({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final TextEditingController textEditingController = TextEditingController(
+        text: context.read<NewCategoryCubit>().state.categoryModel.name);
+    return Dialog(
+      elevation: 0,
+      backgroundColor: AppColors.kBackgroundColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16.0),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+              padding: EdgeInsets.only(
+                  top: context.fontSize * 1,
+                  left: context.fontSize * 1,
+                  right: context.fontSize * 1,
+                  bottom: context.fontSize * 0.5),
+              child: TextField(
+                onChanged: (newText) {
+                  context
+                      .read<NewCategoryCubit>()
+                      .updateProperty(name: newText);
+                },
+                maxLines: 5,
+                minLines: 3,
+                controller: textEditingController,
+                style: TextStyle(fontSize: context.fontSize * 1.1),
+                autofocus: true,
+                autocorrect: true,
+                cursorColor: AppColors.kLightPurple,
+                cursorHeight: context.height * 0.03,
+                decoration: InputDecoration(
+                  isDense: true,
+                  labelText: "Category",
+                  labelStyle: TextStyle(
+                      fontSize: context.fontSize,
+                      color: AppColors.kLightPurple),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                        color: AppColors.kLightPurple, width: 2.0),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  disabledBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                        color: AppColors.kLightPurple, width: 2.0),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  border: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                        color: AppColors.kLightPurple, width: 2.0),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                        color: AppColors.kLightPurple, width: 2.0),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+              )),
           Row(
             children: [
               Expanded(
@@ -1129,87 +1257,12 @@ class NewCategoryColorDialog extends StatelessWidget {
             child: SingleChildScrollView(
               child: Column(children: [
                 Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: context.width * 0.05),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      CategoryColorButton(color: AppColors.kLightPurple),
-                      CategoryColorButton(color: AppColors.kLightPurple),
-                      CategoryColorButton(color: AppColors.kLightPurple),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: context.width * 0.05),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      CategoryColorButton(color: AppColors.kLightPurple),
-                      CategoryColorButton(color: AppColors.kLightPurple),
-                      CategoryColorButton(color: AppColors.kLightPurple),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: context.width * 0.05),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      CategoryColorButton(color: AppColors.kLightPurple),
-                      CategoryColorButton(color: AppColors.kLightPurple),
-                      CategoryColorButton(color: AppColors.kLightPurple),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: context.width * 0.05),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      CategoryColorButton(color: AppColors.kLightPurple),
-                      CategoryColorButton(color: AppColors.kLightPurple),
-                      CategoryColorButton(color: AppColors.kLightPurple),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: context.width * 0.05),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      CategoryColorButton(color: AppColors.kLightPurple),
-                      CategoryColorButton(color: AppColors.kLightPurple),
-                      CategoryColorButton(color: AppColors.kLightPurple),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: context.width * 0.05),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      CategoryColorButton(color: AppColors.kLightPurple),
-                      CategoryColorButton(color: AppColors.kLightPurple),
-                      CategoryColorButton(color: AppColors.kLightPurple),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: context.width * 0.05),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      CategoryColorButton(color: AppColors.kLightPurple),
-                    ],
-                  ),
-                ),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: context.width * 0.05),
+                    child: Wrap(
+                        children: customCategoriesColors
+                            .map((e) => CategoryColorButton(color: e))
+                            .toList())),
               ]),
             ),
           ),

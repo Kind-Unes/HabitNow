@@ -21,7 +21,8 @@ class NewTaskCubit extends Cubit<NewTaskState> {
             category: CategoryModel(
                 color: AppColors.kLightPurple,
                 name: "Task",
-                icon: Icons.timer_outlined),
+                icon: Icons.timer_outlined,
+                id: '3'),
             date: DateTime.now(),
             reminder: ReminderModel(
               schedule: ReminderSchedule.alwaysEnabled,
@@ -59,7 +60,10 @@ class NewTaskCubit extends Cubit<NewTaskState> {
     emit(NewTaskState(TaskModel(
         name: '',
         category: CategoryModel(
-            color: AppColors.kLightPurple, name: "Task", icon: Icons.abc),
+            color: AppColors.kLightPurple,
+            name: "Task",
+            icon: Icons.abc,
+            id: ''), // TODO: Don't forget to set this later in the state managemnet part
         date: DateTime.now(),
         reminder: ReminderModel(
           schedule: ReminderSchedule.alwaysEnabled,

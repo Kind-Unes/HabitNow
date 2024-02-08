@@ -191,8 +191,11 @@ class CategoryModel {
   final IconData icon;
   @HiveField(2)
   final String name;
+  @HiveField(3)
+  final String id;
 
   CategoryModel({
+    required this.id,
     required this.color,
     required this.icon,
     required this.name,
@@ -201,8 +204,10 @@ class CategoryModel {
     Color? color,
     IconData? icon,
     String? name,
+    String? id,
   }) {
     return CategoryModel(
+      id: id ?? this.id,
       color: color ?? this.color,
       icon: icon ?? this.icon,
       name: name ?? this.name,
@@ -222,6 +227,7 @@ class CategoryModel {
       color: Color(map['color'] as int),
       icon: IconData(map['icon'] as int, fontFamily: 'MaterialIcons'),
       name: map['name'] as String,
+      id: map['id'] as String,
     );
   }
 
