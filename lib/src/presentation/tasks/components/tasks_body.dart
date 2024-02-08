@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 import 'package:habit_now/src/cubit/tasks_cubits/tasks_database_cubit.dart.dart';
 import 'package:habit_now/src/utils/const.dart';
@@ -234,7 +235,7 @@ class SingleTasksEmptyPage extends StatelessWidget {
   }
 }
 
-// Recurring tasks
+//? Recurring tasks
 class RecurringTasksPage extends StatelessWidget {
   const RecurringTasksPage({
     super.key,
@@ -242,6 +243,28 @@ class RecurringTasksPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return ListView.builder(
+      itemCount: 2,
+      itemBuilder: (context, index) {
+        return Slidable(
+          startActionPane: ActionPane(
+            motion: const BehindMotion(),
+            children: [
+              SlidableAction(
+                onPressed: (_) {},
+                backgroundColor: Colors.green,
+                icon: Icons.abc,
+              )
+            ],
+          ),
+          child: Container(
+            // Your content goes here
+            child: ListTile(
+              title: Text('Item $index'),
+            ),
+          ),
+        );
+      },
+    );
   }
 }

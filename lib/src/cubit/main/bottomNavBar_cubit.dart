@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class BottomNavBarState extends Equatable {
+  class BottomNavBarState extends Equatable {
   final int currentIndex; // Changed from 'state'
 
   const BottomNavBarState(this.currentIndex);

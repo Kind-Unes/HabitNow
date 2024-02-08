@@ -26,7 +26,6 @@ import 'package:habit_now/src/presentation/tasks/subpages/selectCategory_page.da
 import 'package:habit_now/src/presentation/tasks/subpages/whenToDoIt_page.dart';
 import 'package:habit_now/src/presentation/timer/timer.dart';
 import 'package:habit_now/src/utils/boxes.dart';
-import 'package:habit_now/src/utils/models/reccurringTask_model.dart';
 import 'package:habit_now/src/utils/models/task_model.dart';
 import 'package:habit_now/src/utils/theme.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -39,26 +38,25 @@ void main() async {
   Hive.registerAdapter(ReminderModelAdapter());
   Hive.registerAdapter(CategoryModelAdapter());
   Hive.registerAdapter(ColorAdapter());
-  Hive.registerAdapter(ReccurringTaskModelAdapter());
   Hive.registerAdapter(TimeOfDayAdapter());
   Hive.registerAdapter(TaskModelAdapter());
   Hive.registerAdapter(IconDataAdapter());
-  Hive.registerAdapter(WhenToDoITAdapter());
-  Hive.registerAdapter(HowToDoItAdapter());
-  Hive.registerAdapter(ReapeatAdapter());
-  Hive.registerAdapter(NotAlternateDaysAdapter());
-  Hive.registerAdapter(AlternateDaysAdapter());
-  Hive.registerAdapter(SomeDaysPerPeriodAdapter());
-  Hive.registerAdapter(SpecificDaysOfTheYearAdapter());
-  Hive.registerAdapter(UseDaysOfTheWeekYearAdapter());
-  Hive.registerAdapter(SpecificDaysOfTheMonthAdapter());
-  Hive.registerAdapter(UseDaysOfTheWeekMonthAdapter());
-  Hive.registerAdapter(SpecifcDaysOfTheWeekAdapter());
+  // Hive.registerAdapter(ReccurringTaskModelAdapter());
+  // Hive.registerAdapter(WhenToDoITAdapter());
+  // Hive.registerAdapter(HowToDoItAdapter());
+  // Hive.registerAdapter(ReapeatAdapter());
+  // Hive.registerAdapter(NotAlternateDaysAdapter());
+  // Hive.registerAdapter(AlternateDaysAdapter());
+  // Hive.registerAdapter(SomeDaysPerPeriodAdapter());
+  // Hive.registerAdapter(SpecificDaysOfTheYearAdapter());
+  // Hive.registerAdapter(UseDaysOfTheWeekYearAdapter());
+  // Hive.registerAdapter(SpecificDaysOfTheMonthAdapter());
+  // Hive.registerAdapter(UseDaysOfTheWeekMonthAdapter());
+  // Hive.registerAdapter(SpecifcDaysOfTheWeekAdapter());
 
   await Hive.initFlutter();
-  tasksBox = await Hive.openBox<TaskModel>('tasks');
-  customCategoriesBox = await Hive.openBox<CategoryModel>("categories");
-  recurringTasksBox = await Hive.openBox<CategoryModel>("recurringTasks");
+  tasksBox = await Hive.openBox<TaskModel>('1');
+  customCategoriesBox = await Hive.openBox<CategoryModel>("2");
 
   runApp(const MyApp());
 }

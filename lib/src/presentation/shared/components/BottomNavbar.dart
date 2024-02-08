@@ -52,7 +52,7 @@ class CustomBottomNavTab extends StatelessWidget {
             text,
             style: TextStyle(
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-                fontSize: 16,
+                fontSize: 14,
                 color: isSelected
                     ? const Color.fromARGB(255, 255, 15, 99)
                     : Colors.grey),
@@ -80,7 +80,7 @@ class CustomBottomNavBar extends StatelessWidget {
             top: 15,
           ),
           width: double.infinity,
-          height: context.height * 0.11,
+          height: context.height * 0.13,
           decoration:
               const BoxDecoration(color: Color.fromARGB(255, 28, 28, 28)),
           child:

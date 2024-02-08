@@ -3,10 +3,9 @@ import 'package:habit_now/src/utils/models/recurringTasks_enums.dart';
 import 'package:habit_now/src/utils/models/task_model.dart';
 import 'package:hive/hive.dart';
 
-part "reccurringTask_model.g.dart";
+// part "reccurringTask_model.g.dart";
 
 // Existing enum definitions...
-
 
 @HiveType(typeId: 7)
 class ReccurringTaskModel {
