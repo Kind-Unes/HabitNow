@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:habit_now/src/cubit/tasks_cubits/addCategory_cubiy.dart';
 import 'package:habit_now/src/cubit/tasks_cubits/new_task_cubit.dart';
 import 'package:habit_now/src/presentation/tasks/subpages/newCategory_page.dart';
-import 'package:habit_now/src/presentation/tasks/subpages/newTask_page.dart';
 import 'package:habit_now/src/utils/app_static_data.dart';
 import 'package:habit_now/src/utils/const.dart';
 import 'package:habit_now/src/utils/extentions.dart';
