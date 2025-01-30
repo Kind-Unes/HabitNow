@@ -395,7 +395,7 @@ class FloatingActionButtonBottomSheet extends StatelessWidget {
             },
             title: "Recurring Task",
             subTitle:
-                "Activty that repeats over time without tracking or statistics.",
+                "Activity that repeats over time without tracking or statistics.",
             icon: Icons.repeat),
         FloatingABBottomSheetTile(
             function: () {
