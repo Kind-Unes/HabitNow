@@ -1,6 +1,6 @@
 <div align="center">
 
-# Habit Now: Flutter Habit Tracker, Task Manager & Focus Timer
+# Habit Now: Flutter Habit Tracker App, Task Manager & Focus Timer
 
 **Free, open-source Flutter habit tracker, to-do list and recurring task manager with a built-in timer.**
 Build better routines, track every task and measure your focus time, all stored offline on your device.
